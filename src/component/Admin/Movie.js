@@ -107,7 +107,7 @@ const Movie = ({setMovieList,movieList}) => {
           silverPrice: "",
           platinumPrice: "",
         });
-        setMovieList([...movieList, response.data.data]);
+        setMovieList([...movieList, response.data]);
       }
     } catch (error) {
       alert(error?.response?.data|| "something error")

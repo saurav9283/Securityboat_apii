@@ -58,23 +58,23 @@ const AdminmovieList = ({movieList,setMovieList}) => {
                   <Trash2
                     size={30}
                     className='absolute top-2 right-2 bg-red-500 rounded-full p-2 cursor-pointer'
-                    onClick={() => handleDelete(movie._id)} 
+                    onClick={() => handleDelete(movie?._id)} 
                   />
                 )}
                 <CardMedia
                   style={{ height: "200px", width: "280px" }}
                   component="img"
                   image={movie?.poster}
-                  alt={movie.name}
+                  alt={movie?.name}
                 />
                 <Typography gutterBottom className="text-xs font-bold" component="div">
-                  Movie Name - {movie.name}
+                  Movie Name - {movie?.name}
                 </Typography>
                 <Typography gutterBottom className="text-xs" component="div">
-                  Language - {movie.language}
+                  Language - {movie?.language}
                 </Typography>
                 <Typography gutterBottom className="text-xs" component="div">
-                  Hall - {movie.screen[0].screenNumber}
+                  Hall - {movie?.screen[0]?.screenNumber}
                 </Typography>
                 <CardContent className="flex gap-10 items-end justify-between">
                   <div>
@@ -83,14 +83,14 @@ const AdminmovieList = ({movieList,setMovieList}) => {
                       component="div"
                       className="flex justify-center"
                     >
-                      <span className="text-xs">{movie.cast}</span> 
+                      <span className="text-xs">{movie?.cast}</span> 
                     </Typography>
                   </div>
                   <div className="mt-[-50px] gap-10">
                     <Rating
                       style={{ minWidth: "80px" }}
                       name="read-only"
-                      value={movie.rating}
+                      value={movie?.rating}
                       readOnly
                     />
                   </div>
