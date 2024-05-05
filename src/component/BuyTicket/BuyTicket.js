@@ -125,7 +125,7 @@ const BuyTicket = () => {
         
     } catch (error) {
       console.error(error);
-      alert(error?.response?.data?.message || "Unable to book ticket. Please try again later.")
+      alert(error?.response?.data?.message || "Please relode the page and try again.")
     }
   };
 
