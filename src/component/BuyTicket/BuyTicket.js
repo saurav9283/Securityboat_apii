@@ -95,6 +95,7 @@ const BuyTicket = () => {
         seats: selectedSeatId,
         amount: updatedPrice,
       }
+    setOpen(false);
       // console.log(bookingData,"==================")
       const {data: { order,booking }} = await createBookingService(bookingData);
 
@@ -124,6 +125,7 @@ const BuyTicket = () => {
         
     } catch (error) {
       console.error(error);
+      alert(error?.response?.data?.message || "Unable to book ticket. Please try again later.")
     }
   };
 
