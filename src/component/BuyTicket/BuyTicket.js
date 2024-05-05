@@ -11,6 +11,8 @@ import { useLocation } from "react-router-dom";
 import { createSeatService, getSheetsService } from "../../services/sheetService";
 import axios from "axios";
 import { getSeatNumberAndType } from "../../libs/utils";
+import { createBookingService, getPaymentsKeyService } from "../../services/paymentServices";
+import { PAYMENT_CALLBACK_URL } from "../../libs/constant";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -34,8 +36,8 @@ const BuyTicket = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  let updatedPrice = totalPrice;
   const handleCheckboxChange = (value, category) => {
-    let updatedPrice = totalPrice;
     const uniqueKey = `${value}${category}`;
     if (selectedCheckboxes.includes(uniqueKey)) {
       setSelectedCheckboxes(
@@ -72,44 +74,42 @@ const BuyTicket = () => {
     };
     getSheet();
   }, []);
-
-
+  
+  const user = JSON.parse(localStorage.getItem("user"));
+  
   const CheckoutHandel = async (amount) => {
-    
-
     // const response = await createSeatService({ movie: location.state.movie._id, screen: location.state.movie.screen[0]._id, seat: selectedCheckboxes });
     try {
-      const response = Promise.all(selectedCheckboxes.map(async (uniqueKey) => {
+      const allSelectedSeat = await Promise.all(selectedCheckboxes.map(async (uniqueKey) => {
         const {type,seatNo} = getSeatNumberAndType(uniqueKey);
          // console.log({ movie: location.state.movie._id, screen: location.state.movie.screen[0]._id, seatNo, type: type.toLocaleUpperCase(), amount: price[type] })
          return await createSeatService({ movie: location.state.movie._id, screen: location.state.movie.screen[0]._id, seatNo, type: type.toLocaleUpperCase(), amount: price[type] });
        }));
-      const {
-        data: { key },
-      } = await axios.get("http://localhost:8080/get_key");
-      // } = await axios.get("https://payment-gateway-ui.vercel.app/get_key");
-      //   console.log(key)
-      const {
-        data: { order },
-      } = await axios.post("http://localhost:8080/api/checkout", {
-        // } = await axios.post("https://payment-gateway-ui.vercel.app/api/checkout", {
-        amount,
-      });
+      const {data: { key }} = await getPaymentsKeyService();
+      const selectedSeatId = allSelectedSeat.map((item) => item.data._id);
+      // console.log(selectedSeatId,"==================");
+      const bookingData ={
+        user: user?._id,
+        movie: location.state.movie._id,
+        screen: location.state.movie.screen[0]._id,
+        seats: selectedSeatId,
+        amount: updatedPrice,
+      }
+      // console.log(bookingData,"==================")
+      const {data: { order,booking }} = await createBookingService(bookingData);
 
       const options = {
-        key: key, // Enter the Key ID generated from the Dashboard
-        amount: 1000, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        key: key, 
+        amount: updatedPrice, 
         currency: "INR",
         name: "Testing Getway",
         description: "wdjkbcbckddcb",
         image: "https://avatars.githubusercontent.com/u/87579538?v=4",
-        order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        callback_url: "http://localhost:8080/api/paymentverification",
-        // callback_url: "http://localhost:3001/buy-ticket",
-        // callback_url: "https://payment-gateway-ui.vercel.app/api/paymentverification",
+        order_id: order.id, 
+        callback_url: `${PAYMENT_CALLBACK_URL}?bookingId=${booking?._id}`,
         prefill: {
-          name: "Gaurav Kumar",
-          email: "sauravkumar00108@gmail.com",
+          name: user?.name,
+          email: user?.email,
           contact: "9000090000",
         },
         notes: {
@@ -120,9 +120,8 @@ const BuyTicket = () => {
         },
       };
       var rzp1 = new window.Razorpay(options);
-      rzp1.open();
-
-      // console.log(data)
+        rzp1.open();
+        
     } catch (error) {
       console.error(error);
     }

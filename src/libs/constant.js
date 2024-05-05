@@ -1,0 +1,1 @@
+export const PAYMENT_CALLBACK_URL = `${process.env.REACT_APP_API_URL}/payment/verify`;
