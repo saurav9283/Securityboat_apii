@@ -52,8 +52,8 @@ const BuyTicket = () => {
   useEffect(() => {
     const getSheet = async () => {
       try {
-        const res = await getSheetsService(location.state.movie._id, location.state.movie.screen[0]._id);
-        const tempraryDisable = res.data.data.map((item) => {
+        const res = await getSheetsService(location?.state.movie?._id, location?.state?.movie.screen[0]._id);
+        const tempraryDisable = res?.data?.data?.map((item) => {
           const currentDate = new Date();
           let seatUpdationDate = new Date(item.updatedAt);
           seatUpdationDate.setMinutes(seatUpdationDate.getMinutes() + 10);
@@ -75,55 +75,57 @@ const BuyTicket = () => {
 
 
   const CheckoutHandel = async (amount) => {
-    const response = Promise.all(selectedCheckboxes.map(async (uniqueKey) => {
-     const {type,seatNo} = getSeatNumberAndType(uniqueKey);
-      console.log({ movie: location.state.movie._id, screen: location.state.movie.screen[0]._id, seatNo, type: type.toLocaleUpperCase(), amount: price[type] })
-      return await createSeatService({ movie: location.state.movie._id, screen: location.state.movie.screen[0]._id, seatNo, type: type.toLocaleUpperCase(), amount: price[type] });
-    }));
+    
 
     // const response = await createSeatService({ movie: location.state.movie._id, screen: location.state.movie.screen[0]._id, seat: selectedCheckboxes });
-    // try {
-    //   const {
-    //     data: { key },
-    //   } = await axios.get("http://localhost:4000/get_key");
-    //   // } = await axios.get("https://payment-gateway-ui.vercel.app/get_key");
-    //   //   console.log(key)
-    //   const {
-    //     data: { order },
-    //   } = await axios.post("http://localhost:4000/api/checkout", {
-    //     // } = await axios.post("https://payment-gateway-ui.vercel.app/api/checkout", {
-    //     amount,
-    //   });
+    try {
+      const response = Promise.all(selectedCheckboxes.map(async (uniqueKey) => {
+        const {type,seatNo} = getSeatNumberAndType(uniqueKey);
+         // console.log({ movie: location.state.movie._id, screen: location.state.movie.screen[0]._id, seatNo, type: type.toLocaleUpperCase(), amount: price[type] })
+         return await createSeatService({ movie: location.state.movie._id, screen: location.state.movie.screen[0]._id, seatNo, type: type.toLocaleUpperCase(), amount: price[type] });
+       }));
+      const {
+        data: { key },
+      } = await axios.get("http://localhost:8080/get_key");
+      // } = await axios.get("https://payment-gateway-ui.vercel.app/get_key");
+      //   console.log(key)
+      const {
+        data: { order },
+      } = await axios.post("http://localhost:8080/api/checkout", {
+        // } = await axios.post("https://payment-gateway-ui.vercel.app/api/checkout", {
+        amount,
+      });
 
-    //   const options = {
-    //     key: key, // Enter the Key ID generated from the Dashboard
-    //     amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    //     currency: "INR",
-    //     name: "Testing Getway",
-    //     description: "wdjkbcbckddcb",
-    //     image: "https://avatars.githubusercontent.com/u/87579538?v=4",
-    //     order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    //     callback_url: "http://localhost:4000/api/paymentverification",
-    //     // callback_url: "https://payment-gateway-ui.vercel.app/api/paymentverification",
-    //     prefill: {
-    //       name: "Gaurav Kumar",
-    //       email: "sauravkumar00108@gmail.com",
-    //       contact: "9000090000",
-    //     },
-    //     notes: {
-    //       address: "Razorpay Corporate Office",
-    //     },
-    //     theme: {
-    //       color: "#3399cc",
-    //     },
-    //   };
-    //   var rzp1 = new window.Razorpay(options);
-    //   rzp1.open();
+      const options = {
+        key: key, // Enter the Key ID generated from the Dashboard
+        amount: 1000, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        currency: "INR",
+        name: "Testing Getway",
+        description: "wdjkbcbckddcb",
+        image: "https://avatars.githubusercontent.com/u/87579538?v=4",
+        order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        callback_url: "http://localhost:8080/api/paymentverification",
+        // callback_url: "http://localhost:3001/buy-ticket",
+        // callback_url: "https://payment-gateway-ui.vercel.app/api/paymentverification",
+        prefill: {
+          name: "Gaurav Kumar",
+          email: "sauravkumar00108@gmail.com",
+          contact: "9000090000",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+      var rzp1 = new window.Razorpay(options);
+      rzp1.open();
 
-    //   // console.log(data)
-    // } catch (error) {
-    //   console.error(error);
-    // }
+      // console.log(data)
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

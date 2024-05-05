@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { MoveRight, MapPin } from "lucide-react";
+import { MoveRight, MapPin, Trash2 } from "lucide-react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -42,6 +42,7 @@ const Recommended = ({movieList}) => {
         <div className="flex mt-1 gap-7 m-5">
           {movieList.map((movie, index) => (
             <Card key={index} sx={{ minWidth: "250px", minHeight: "300px" }}>
+              
               <CardActionArea>
                 <CardMedia
                   style={{ height: "200px" }}
@@ -49,6 +50,7 @@ const Recommended = ({movieList}) => {
                   image={movie.poster}
                   alt={movie.title}
                 />
+                {/* <Trash2 size={15} /> */}
                 <Typography gutterBottom  component="div">
                   <h1 className="text-xl font-bold ml-2">{movie.name}</h1>
                 </Typography>

@@ -36,6 +36,10 @@ function ResponsiveAppBar() {
   };
   const handelLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("rzp_checkout_anon_id");
+    localStorage.removeItem("rzp_device_id");
+    navigate("/login");
   };
 
   return (

@@ -33,8 +33,9 @@ const Home = () => {
       <Nav />
       {isAdmin ? (
         <>
-        <Admin/>
-        <AdminmovieList/>
+        <Admin setMovieList={setMovieList} movieList={movieList}/>
+        <AdminmovieList setMovieList={setMovieList} movieList={movieList} />
+
         </>
       ) : (
         <div>

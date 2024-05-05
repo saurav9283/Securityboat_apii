@@ -8,7 +8,7 @@ import { DateRangePicker } from 'rsuite';
 import DatePicker from "./DatePicker/DatePicker";
 import { getScreenService } from "../../services/screenService";
 import MultipleSelectChip from "../InputField/MultipleSelectChip";
-const Movie = () => {
+const Movie = ({setMovieList,movieList}) => {
   const [open, setOpen] = React.useState(false);
   const [screens, setScreens] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -90,6 +90,7 @@ const Movie = () => {
     delete dataToPost.platinumPrice;
       const response = await createMovieService(dataToPost);
       console.log(response);
+
       if (response.status === 201) {
         alert("Movie created successfully");
         handleClose();
@@ -106,6 +107,7 @@ const Movie = () => {
           silverPrice: "",
           platinumPrice: "",
         });
+        setMovieList([...movieList, response.data.data]);
       }
     } catch (error) {
       alert(error?.response?.data|| "something error")
