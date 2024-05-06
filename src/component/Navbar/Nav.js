@@ -10,26 +10,8 @@ import { useNavigate } from "react-router-dom";
 const pages = ["Upcomming Movies", "Recommended Movie"];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    alert("kjh");
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
   const handelLogin = () => {
     navigate("/login");
@@ -45,8 +27,7 @@ function ResponsiveAppBar() {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+        <Toolbar disableGutters className="flex justify-between">
           <Typography
             variant="h6"
             noWrap
@@ -65,23 +46,6 @@ function ResponsiveAppBar() {
           >
             BookUsNow
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                  "&:hover": { backgroundColor: "#150c0c" },
-                }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
 
           <div>
             {token ? (
