@@ -21,7 +21,9 @@ Ensure security measures like user authentication and data encryption are proper
 Deploy the frontend on Vercel and backend services on Render.
 
 
-#ADMIN ID PASSWORD
+
+
+# ADMIN ID PASSWORD
 
 Email = admin@gmail.com
 Password = admin123
